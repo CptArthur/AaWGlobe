@@ -1,16 +1,10 @@
 import * as THREE from "https://unpkg.com/three/build/three.module.js"; //https://cdn.skypack.dev/three
 import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js'; //https://cdn.skypack.dev/@three-ts/orbit-controls
 import * as Tweakpane from 'https://cdn.skypack.dev/tweakpane';
-import * as FilePond from "https://unpkg.com/filepond@^4/dist/filepond.js"
-
-
 
 var headerHeight = document.getElementById('header').clientHeight;
-const pane = new Tweakpane.Pane();
-console.log(headerHeight);
 let raycaster1
 let raycaster2
-//Basic init
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 10, window.innerWidth / (window.innerHeight - headerHeight), 0.1, 1000 ); //10,...,0.1, 1000
 const renderer = new THREE.WebGLRenderer({
@@ -24,6 +18,9 @@ controls.enablePan = false;
 controls.minDistance = 2;
 controls.maxDistance = 15;
 
+scene.background = new THREE.Color(0x10171E)
+
+// https://i.imgur.com/2dxaFs9.jpeg
 camera.position.set( 0, 0, 10 );
 controls.update();
 
@@ -36,14 +33,47 @@ window.addEventListener( 'resize', onWindowResize );
 raycaster1.layers.set( 1 );
 raycaster2.layers.set( 2 );
 
-//The planet
 const geometry = new THREE.SphereGeometry( 1, 50, 50 );
-const material = new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load("images/AgarisMap.png")} );
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
 cube.layers.enable( 1 );
 
 
+let ControlPanelContainer = document.getElementById("ControlPanel");
+
+const pane = new Tweakpane.Pane({title: 'ControlPanel', container: ControlPanelContainer});
+const Par = {
+    "Setup": "Agaris"
+
+}
+pane.addInput(Par, "Setup", {
+    options: {
+    Agaris: 'Agaris',
+    Custom: 'custom',
+ 
+    }}).on("change", (ev) =>{
+        UpdatePlanetTexture(Par.Setup)
+    }); 
+
+const p1 = pane.addFolder({
+    title: 'Planet Info',
+  });
+
+  
+function UpdatePlanetTexture(PlanetName){
+    console.log(`images/${PlanetName}.png`);
+    cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/${PlanetName}.png`)}) 
+}
+
+UpdatePlanetTexture(Par.Setup)
+
+
+
+
+var PlanetInfo={
+    name:"Johnson Planet"
+};
 var listofmarkers = [];
 var addingmarkerbool = false;
 
@@ -64,7 +94,11 @@ function addmarkertoplanet(){
     let intersects = raycaster1.intersectObjects(scene.children)
     if (intersects[ 0 ].object){
         console.log(intersects[ 0 ].point);
-        addMarker(intersects[ 0 ].point.x,intersects[ 0 ].point.y,intersects[ 0 ].point.z);
+        var templist = [];
+        templist.push(intersects[ 0 ].point.x)
+        templist.push(intersects[ 0 ].point.y)
+        templist.push(intersects[ 0 ].point.z)
+        addMarker(templist);
     }
 }
 
@@ -72,37 +106,37 @@ function addmarkertoplanet(){
 
 //add Maker function
 window.addMarker= addMarker;
-function addMarker(Xcoord,Ycoord,Zcoord){
+function addMarker(coord, Name = "", color = 16777215, symbol = "images/HQ.png", symbolsize =  0.1, opacity = 1){
     console.log("Adding Marker")
-    if (Xcoord >=0){
-        Xcoord += 0.001
+    if (coord[0] >=0){
+        coord[0] += 0.001
     }
     else{
-        Xcoord -= 0.001
+        coord[0] -= 0.001
     }
-    if (Ycoord >=0){
-        Ycoord += 0.001
+    if (coord[1] >=0){
+        coord[1] += 0.001
     }
     else{
-        Ycoord -= 0.001
+        coord[1] -= 0.001
     }
-    if (Zcoord >=0){
-        Zcoord += 0.001
+    if (coord[2] >=0){
+        coord[2] += 0.001
     }else{
-        Zcoord -= 0.001
+        coord[2] -= 0.001
     }
 
 
     var vargeometry = new THREE.PlaneGeometry(0.1,0.1)
-    var varmaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: new THREE.TextureLoader().load("images/HQ.png")});
+    var varmaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: new THREE.TextureLoader().load(symbol)});
     varmaterial.transparent = true
-    varmaterial.color = new THREE.Color(16777215)
+    varmaterial.color = new THREE.Color(color)
     var plane = new THREE.Mesh( vargeometry, varmaterial);
-    plane.position.set(Xcoord,Ycoord,Zcoord);
-    plane.lookAt(10*Xcoord,10*Ycoord,10*Zcoord);
+    plane.position.set(coord[0],coord[1],coord[2]);
+    plane.lookAt(10*coord[0],10*coord[1],10*coord[2]);
     scene.add(plane);
     plane.layers.enable( 2 );
-    var markerdata = {"Name": "", "coords": [plane.position.x,plane.position.y,plane.position.z], "color": 16777215, "symbol": "images/HQ.png", "symbolsize": 0.1, "opacity": 1};  
+    var markerdata = {"Name": Name, "coords": [plane.position.x,plane.position.y,plane.position.z], "color": 16777215, "symbol": symbol, "symbolsize": symbolsize, "opacity": opacity};  
     listofmarkers.push(markerdata)
 
 
@@ -204,22 +238,15 @@ function editmode(object, Jsonmarker, i){
     }
 }
 
-
-
-
-
-
-
-//Export markers button 
-function exportMarkers() {
-    
-    exportToJsonFile(listofmarkers)
-}
-
 //The menu itself
 ExportId.addEventListener("click", function(){
     console.log("Trying to download johnson")
-    exportMarkers(listofmarkers)
+    var JsonData = {
+        "PlanetInfo": PlanetInfo,
+        "listofmarkers": listofmarkers
+    };
+
+    exportToJsonFile(JsonData);
     }
 , false)
 
@@ -276,42 +303,33 @@ function onPointerMove( event ) {
 
 }
 
+///
+ImportId.addEventListener("click", function(){
+    var selectedFile = document.getElementById('inputFile').files[0];
+    
+    // Create a new FileReader() object
+    let reader = new FileReader()
 
+    // run function JSONfileHandler when file is loaded
+    reader.onload = JSONfileHandler;
 
+    // read file
+    reader.readAsText(selectedFile)
 
-
-
-
-
-
-
-
-/*
-//Get menu on right click
-var rect = renderer.domElement.getBoundingClientRect();
-if (document.addEventListener) {
-  document.addEventListener('contextmenu', function(e) {
-    raycaster1.setFromCamera(pointer, camera);
-        // See if the ray from the camera into the world hits one of our meshes
-    const intersects = raycaster1.intersectObject( cube );
-
-    // Toggle rotation bool for meshes that we clicked
-    if ( intersects.length > 0 ) {
-        controls.enabled = false;
-        menu.style.left = (event.clientX - rect.left) + "px";
-        menu.style.top = (event.clientY - rect.top) + "px";
-        menu.style.display = ""; 
     }
-    e.preventDefault();
-  }, false);
-} else {
-  document.attachEvent('oncontextmenu', function() {
-    alert("You've tried to open context menu");
-    window.event.returnValue = false;
-  });
+, false)
+
+function JSONfileHandler(file) {
+    let fileData = file.target.result;
+    let json = JSON.parse(fileData);
+    let jsonMarkers = json["listofmarkers"];
+    
+    jsonMarkers.forEach(marker => {
+        addMarker(marker["coords"], marker["Name"], marker["color"], marker["symbol"], marker["symbolsize"], marker["opacity"]);
+    });
+    
+    console.log("File imported");
 }
-*/
-//The menu itself
 
 
 

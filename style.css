@@ -10,7 +10,7 @@ body {
   }
   
   /* Style the links inside the navigation bar */
-  .topnav a, .topnav butto, .topnav input{
+  .topnav a, .topnav button{
     float: left;
     color: #f2f2f2;
     text-align: center;
@@ -19,6 +19,15 @@ body {
     font-size: 17px;
   }
   
+    /* Style the links inside the navigation bar */
+    .topnav input{
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
   /* Change the color of links on hover */
   .topnav a:hover, .topnav button:hover {
     background-color: #ddd;
@@ -30,3 +39,38 @@ body {
     background-color: #04AA6D;
     color: white;
   }
+
+/* position the top element right under the nav */
+#topContainer {
+  position: relative;
+  display: flex;
+  height: 0px;
+}
+
+/* position the controlpanel element inside the topContainer */
+#ControlPanel {
+  position: absolute;
+  display: flex;
+  top: 0;
+  right: 0;
+}
+
+#bottomContainer {
+position: absolute;
+width: 100%;
+bottom: 0;
+}
+
+#bottomContainerRelative {
+  position: relative;
+  width: 100%;
+}
+
+#legend {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  background-color: aquamarine;
+}
