@@ -248,7 +248,7 @@ function onWindowResize() {
 }
 
 const vargeometry = new THREE.PlaneGeometry(.1,.1)
-const varmaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: new THREE.TextureLoader().load("images/hq.png")});
+const varmaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: new THREE.TextureLoader().load("images/HQ.png")});
 varmaterial.transparent = true;
 varmaterial.color = new THREE.Color( 0xffffff );
 const decoyplane = new THREE.Mesh( vargeometry, varmaterial);
