@@ -6,7 +6,7 @@ var headerHeight = document.getElementById('header').clientHeight;
 let raycaster1
 let raycaster2
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 10, window.innerWidth / (window.innerHeight - headerHeight), 0.1, 1000 ); //10,...,0.1, 1000
+const camera = new THREE.PerspectiveCamera( 5, window.innerWidth / (window.innerHeight - headerHeight), 0.1, 1000 ); //10,...,0.1, 1000
 const renderer = new THREE.WebGLRenderer({
     antialias: true
 });
@@ -16,12 +16,12 @@ document.body.appendChild( renderer.domElement );
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.enablePan = false;
 controls.minDistance = 2;
-controls.maxDistance = 15;
+controls.maxDistance = 30;
 
 scene.background = new THREE.Color(0x10171E)
 
 // https://i.imgur.com/2dxaFs9.jpeg
-camera.position.set( 0, 0, 10 );
+camera.position.set( 0, 0, 15 );
 controls.update();
 
 //Raycasting 
@@ -46,35 +46,59 @@ const pane = new Tweakpane.Pane({title: 'ControlPanel', container: ControlPanelC
 const Par = {
     "Setup": "Agaris"
 
-}
+};
+const IO = {
+    IO: false,
+};
+
+var currentplanet = "Agaris"
+
+//Planet Selector
 pane.addInput(Par, "Setup", {
     options: {
     Agaris: 'Agaris',
-    Custom: 'custom',
+    Crait: 'Crait',
+    Lezuno: 'Lezuno',
+    Lorus: "Lorus",
+    Thora4: 'Thora4',
  
     }}).on("change", (ev) =>{
-        UpdatePlanetTexture(Par.Setup)
+        currentplanet = Par.Setup
+        DeleteMarkers()
+        listofmarkers = []
+        LoadLocalStorage()
+        UpdatePlanetTexture(Par.Setup, IO.enabled)
     }); 
+
+
+//IO or vanilla    
+pane.addInput(IO, 'IO').on("change", (ev) =>{
+        UpdatePlanetTexture(Par.Setup, IO.IO)
+    }); 
+        
 
 const p1 = pane.addFolder({
     title: 'Planet Info',
   });
 
   
-function UpdatePlanetTexture(PlanetName){
-    console.log(`images/${PlanetName}.png`);
-    cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/${PlanetName}.png`)}) 
+function UpdatePlanetTexture(PlanetName,IOEnabled){
+    //console.log(`images/${PlanetName}.png`);
+    if(IOEnabled){
+        cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/${PlanetName}_IO.png`)}) 
+    }
+    else{
+        cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/${PlanetName}.png`)}) 
+    }
+
 }
-
-UpdatePlanetTexture(Par.Setup)
-
+UpdatePlanetTexture(currentplanet,false)
 
 
-
-var PlanetInfo={
-    name:"Johnson Planet"
-};
 var listofmarkers = [];
+var listofmarkersobject = [];
+
+
 var addingmarkerbool = false;
 
 AddMarkerId.addEventListener("click", function(){
@@ -85,6 +109,16 @@ AddMarkerId.addEventListener("click", function(){
 
     }
 })
+
+
+
+
+
+
+
+
+
+
 
 function addmarkertoplanet(){
     document.removeEventListener('contextmenu', addmarkertoplanet)
@@ -101,6 +135,9 @@ function addmarkertoplanet(){
         addMarker(templist);
     }
 }
+
+
+
 
 
 
@@ -134,18 +171,21 @@ function addMarker(coord, Name = "", color = 16777215, symbol = "images/HQ.png",
     var plane = new THREE.Mesh( vargeometry, varmaterial);
     plane.position.set(coord[0],coord[1],coord[2]);
     plane.lookAt(10*coord[0],10*coord[1],10*coord[2]);
+    plane.material.opacity = opacity
+    plane.geometry = new THREE.PlaneGeometry(symbolsize,symbolsize)
+
+
+
     scene.add(plane);
     plane.layers.enable( 2 );
-    var markerdata = {"Name": Name, "coords": [plane.position.x,plane.position.y,plane.position.z], "color": 16777215, "symbol": symbol, "symbolsize": symbolsize, "opacity": opacity};  
+    var markerdata = {"Name": Name, "coords": [plane.position.x,plane.position.y,plane.position.z], "color": color, "symbol": symbol, "symbolsize": symbolsize, "opacity": opacity};  
     listofmarkers.push(markerdata)
-
-
+    listofmarkersobject.push(plane)
+    UpdateLocalStorage()
 }
 
 //Select Marker object
 window.addEventListener("click", clickonlayer2, false)
-
- 
 function clickonlayer2(){
     raycaster2.setFromCamera(pointer, camera);
     let intersects = raycaster2.intersectObjects(scene.children, false)
@@ -194,8 +234,11 @@ function editmode(object, Jsonmarker, i){
         }   )  
     
     const btn1 = f1.addButton({
-        title: 'Save',
+        title: 'Update',
         });
+    const btn3 = f1.addButton({
+        title: 'Move', 
+    })
     const btn2 = f1.addButton({
     title: 'Delete',
     });
@@ -207,18 +250,33 @@ function editmode(object, Jsonmarker, i){
         object.material.color = new THREE.Color(Jsonmarker.color);
         object.material.opacity = Jsonmarker.opacity
         object.geometry = new THREE.PlaneGeometry(Jsonmarker.symbolsize,Jsonmarker.symbolsize)
+
+        UpdateLocalStorage()
         });
 
     btn2.on('click', () => {
-    f1.dispose();
-    window.removeEventListener("click", disposepan, false)
-    listofmarkers.splice(i,1)
-    object.geometry.dispose();
-    object.material.dispose();
-    scene.remove( object );
-
+        f1.dispose();
+        window.removeEventListener("click", disposepan, false)
+        listofmarkers.splice(i,1)
+        object.geometry.dispose();
+        object.material.dispose();
+        scene.remove( object );
+        listofmarkersobject.slice(i,1)
+        UpdateLocalStorage()
     return
     });
+
+    btn3.on('click', () => {
+        addingmarkerbool = true
+        themoveobject = object
+        theI = i
+        console.log("Moving object")
+        document.addEventListener('contextmenu', MoveMarker)
+        f1.dispose();  
+        window.removeEventListener("click", disposepan, false)      
+        return
+        });
+
 
     window.addEventListener("click", disposepan, false)
 
@@ -233,35 +291,61 @@ function editmode(object, Jsonmarker, i){
         if ( intersects.length > 0 ) {
             window.removeEventListener("click", disposepan, false)
             f1.dispose();
-            console.log("Pane disposed")
+            console.log("1 Pane disposed")
         }
     }
+
+
 }
 
-//The menu itself
-ExportId.addEventListener("click", function(){
-    console.log("Trying to download johnson")
-    var JsonData = {
-        "PlanetInfo": PlanetInfo,
-        "listofmarkers": listofmarkers
-    };
+let themoveobject;
+let theI;
+function MoveMarker(){
+    console.log("Start MoveMarker")
+    document.removeEventListener('contextmenu', MoveMarker)
 
-    exportToJsonFile(JsonData);
+    addingmarkerbool = false
+    decoyplane.position.set(0,0,0)
+
+
+
+    raycaster1.setFromCamera(pointer, camera);
+    let intersects = raycaster1.intersectObjects(scene.children)
+    if (intersects[ 0 ].object){
+        console.log(intersects[ 0 ].point);
+        var coord = [];
+        coord.push(intersects[ 0 ].point.x)
+        coord.push(intersects[ 0 ].point.y)
+        coord.push(intersects[ 0 ].point.z)
     }
-, false)
+    if (coord[0] >=0){
+        coord[0] += 0.001
+    }
+    else{
+        coord[0] -= 0.001
+    }
+    if (coord[1] >=0){
+        coord[1] += 0.001
+    }
+    else{
+        coord[1] -= 0.001
+    }
+    if (coord[2] >=0){
+        coord[2] += 0.001
+    }else{
+        coord[2] -= 0.001
+    }
+    themoveobject.position.set(coord[0],coord[1],coord[2]);
+    themoveobject.lookAt(10*coord[0],10*coord[1],10*coord[2]);
+    console.log(listofmarkers[theI]["Name"])
+    listofmarkers[theI]["coords"] = [coord[0],coord[1],coord[2]]
 
+    
 
-function exportToJsonFile(jsonData) {
-    let dataStr = JSON.stringify(jsonData);
-    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-
-    let exportFileDefaultName = 'data.json';
-
-    let linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
+    console.log("End MoveMarker")
+    UpdateLocalStorage()
 }
+
 
 
 
@@ -275,7 +359,7 @@ function onWindowResize() {
 }
 
 const vargeometry = new THREE.PlaneGeometry(.1,.1)
-const varmaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: new THREE.TextureLoader().load("images/HQ.png")});
+const varmaterial = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: new THREE.TextureLoader().load("images/Marker.png")});
 varmaterial.transparent = true;
 varmaterial.color = new THREE.Color( 0xffffff );
 const decoyplane = new THREE.Mesh( vargeometry, varmaterial);
@@ -302,8 +386,7 @@ function onPointerMove( event ) {
     }
 
 }
-
-///
+//Import files
 ImportId.addEventListener("click", function(){
     var selectedFile = document.getElementById('inputFile').files[0];
     
@@ -327,18 +410,93 @@ function JSONfileHandler(file) {
     jsonMarkers.forEach(marker => {
         addMarker(marker["coords"], marker["Name"], marker["color"], marker["symbol"], marker["symbolsize"], marker["opacity"]);
     });
-    
     console.log("File imported");
 }
 
 
 
+//The menu itself
+ExportId.addEventListener("click", function(){
+    console.log("Trying to download johnson")
+    var JsonData = {
+        "listofmarkers": listofmarkers
+    };
+
+    exportToJsonFile(JsonData);
+    }
+, false)
+
+
+function exportToJsonFile(jsonData) {
+    let dataStr = JSON.stringify(jsonData);
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    let exportFileDefaultName = currentplanet+'.json';
+
+    let linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+}
+
+var LoadLocalStorageforthefirsttime = (function() {
+    var executed = false;
+    return function() {
+        if (!executed) {
+            executed = true;
+            // Retrieve the object from storage
+            var retrievedObjectData = localStorage.getItem(currentplanet+"Data");
+            if(retrievedObjectData != null){
+                let retrievedObject = JSON.parse(retrievedObjectData);
+                let jsonMarkers = retrievedObject["listofmarkers"];
+                
+                jsonMarkers.forEach(marker => {
+                    addMarker(marker["coords"], marker["Name"], marker["color"], marker["symbol"], marker["symbolsize"], marker["opacity"]);
+                });
+            }
+        }
+    };
+})();
+
+LoadLocalStorageforthefirsttime()
+
+
+function LoadLocalStorage(){
+    console.log("Trying to Load: "+currentplanet+"Data")
+    var retrievedObjectData = localStorage.getItem(currentplanet+"Data");
+    if(retrievedObjectData != null){
+        let retrievedObject = JSON.parse(retrievedObjectData);
+        let jsonMarkers = retrievedObject["listofmarkers"];
+        
+        jsonMarkers.forEach(marker => {
+            addMarker(marker["coords"], marker["Name"], marker["color"], marker["symbol"], marker["symbolsize"], marker["opacity"]);
+        });
+    }
+}
+
+
+function UpdateLocalStorage(){
+    var JsonData = {
+        "listofmarkers": listofmarkers
+    };
+    // Put the object into storage
+    localStorage.setItem(currentplanet + "Data", JSON.stringify(JsonData));
+}
+
+function DeleteMarkers(){
+    console.log("DeletingMarkers")
+    listofmarkersobject.forEach(marker => {
+        marker.geometry.dispose();
+        marker.material.dispose();
+        scene.remove( marker );
+    });
+    listofmarkersobject = []
+}
 
 
 function animate() {
     requestAnimationFrame(animate)
     controls.update();
-
 
     renderer.render(scene,camera)
 };
