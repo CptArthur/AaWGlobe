@@ -1,8 +1,10 @@
-import * as THREE from "https://unpkg.com/three/build/three.module.js"; //https://cdn.skypack.dev/three
+import * as THREE from "https://unpkg.com/three@0.127.0/build/three.module.js"; //https://cdn.skypack.dev/three
 import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js'; //https://cdn.skypack.dev/@three-ts/orbit-controls
+import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
 import * as Tweakpane from 'https://cdn.skypack.dev/tweakpane';
 
 var headerHeight = document.getElementById('header').clientHeight;
+let raycaster
 let raycaster1
 let raycaster2
 const scene = new THREE.Scene();
@@ -26,6 +28,7 @@ controls.update();
 
 //Raycasting 
 const pointer = new THREE.Vector2();
+raycaster = new THREE.Raycaster()
 raycaster1 = new THREE.Raycaster();
 raycaster2 = new THREE.Raycaster();
 document.addEventListener( 'mousemove', onPointerMove );
@@ -33,7 +36,7 @@ window.addEventListener( 'resize', onWindowResize );
 raycaster1.layers.set( 1 );
 raycaster2.layers.set( 2 );
 
-const geometry = new THREE.SphereGeometry( 1, 50, 50 );
+const geometry = new THREE.SphereGeometry( 0.98, 50, 50 );
 const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
@@ -138,8 +141,6 @@ function addMarker(coord, Name = "", color = 16777215, symbol = "images/HQ.png",
     plane.layers.enable( 2 );
     var markerdata = {"Name": Name, "coords": [plane.position.x,plane.position.y,plane.position.z], "color": 16777215, "symbol": symbol, "symbolsize": symbolsize, "opacity": opacity};  
     listofmarkers.push(markerdata)
-
-
 }
 
 //Select Marker object
@@ -148,10 +149,11 @@ window.addEventListener("click", clickonlayer2, false)
  
 function clickonlayer2(){
     raycaster2.setFromCamera(pointer, camera);
-    let intersects = raycaster2.intersectObjects(scene.children, false)
+    let intersects = raycaster2.intersectObjects(scene.children, true)
     if(intersects[0] != null){
         if (intersects[ 0 ].object){
             var object = intersects[ 0 ].object;
+            console.log("we got a match")
             var markercoords = [object.position.x,object.position.y,object.position.z]
             for (let i = 0; i < listofmarkers.length; i++) {
                 if(JSON.stringify(listofmarkers[i].coords) == JSON.stringify(markercoords) ){
@@ -330,6 +332,52 @@ function JSONfileHandler(file) {
     
     console.log("File imported");
 }
+
+
+// instantiate a loader
+const loader = new GLTFLoader();
+const obj = loader.load("models/Agaris_Regions.glb", function(object){
+    let model = object.scene;
+    model.name = 'tagName' // OR
+    model.userData.isContainer = true
+    model.visible = true; 
+
+    scene.add(object.scene);
+    
+})
+
+
+//Select Marker object
+window.addEventListener("click", clickGlft, false)
+
+ 
+function clickGlft(){
+    raycaster.setFromCamera(pointer, camera);
+    let intersects = raycaster.intersectObject(objs, true)
+    if(intersects.length > 0) {
+   
+        container = getContainerObjByChild(intersects[0].object);
+     }    
+}
+
+
+
+
+
+
+// Recursive function - this function calls itself again, when isContainer is undefined/false passing its parent as new child
+
+function getContainerObjByChild(child) {
+  
+   if(obj.userData.isContainer) return obj
+
+   else if(obj.parent != null) return this.getContainerObjByChild(obj.parent)
+
+   else return null
+}
+
+
+
 
 
 

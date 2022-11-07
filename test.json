@@ -1,0 +1,15 @@
+
+{
+    "planetinfo": [
+        {
+            "planetname":"Johnson"
+        }
+    ],
+    "markers": [
+        {
+            "Xcoord": 0,
+            "Ycoord": 0,
+            "Zcoord": 0
+        }
+    ]
+}
