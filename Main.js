@@ -494,6 +494,40 @@ function DeleteMarkers(){
 }
 
 
+
+//Import files
+ResetId.addEventListener("click", function(){
+    if (confirm("Are you sure you want to reset everything?")) {
+        DeleteMarkers()
+        fetch(`Default Data/${currentplanet}.json`)
+        .then(response => response.json())
+        .then(data => {
+          // Use the data as needed
+          listofmarkers=data["listofmarkers"]
+          UpdateLocalStorage()
+          LoadLocalStorage()
+        })
+        .catch(error => console.error(error));
+      } else {
+        // User clicked "Cancel" or closed the dialog box
+        // Do nothing
+      }
+
+
+
+    }
+    
+, false)
+
+
+
+
+
+
+
+
+
+
 function animate() {
     requestAnimationFrame(animate)
     controls.update();
