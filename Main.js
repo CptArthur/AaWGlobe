@@ -64,7 +64,7 @@ pane.addInput(Par, "Setup", {
  
     }}).on("change", (ev) =>{
         currentplanet = Par.Setup
-        DeleteMarkers()
+        RemoveMarkers()
         listofmarkers = []
         LoadLocalStorage()
         UpdatePlanetTexture(Par.Setup, IO.enabled)
@@ -85,10 +85,10 @@ const p1 = pane.addFolder({
 function UpdatePlanetTexture(PlanetName,IOEnabled){
     //console.log(`images/${PlanetName}.png`);
     if(IOEnabled){
-        cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/${PlanetName}_IO.png`)}) 
+        cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/Planets_HighRes/${PlanetName}_IO.png`)}) 
     }
     else{
-        cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/${PlanetName}.png`)}) 
+        cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/Planets_HighRes/${PlanetName}.png`)}) 
     }
 
 }
@@ -143,25 +143,28 @@ function addmarkertoplanet(){
 
 //add Maker function
 window.addMarker= addMarker;
-function addMarker(coord, Name = "", color = 16777215, symbol = "images/HQ.png", symbolsize =  0.1, opacity = 1){
+function addMarker(coord, Name = "", color = 16777215, symbol = "images/HQ.png", symbolsize =  0.1, opacity = 1, CreateNew = true){
     console.log("Adding Marker")
-    if (coord[0] >=0){
-        coord[0] += 0.001
+    if(CreateNew){
+        if (coord[0] >=0){
+            coord[0] += 0.001
+        }
+        else{
+            coord[0] -= 0.001
+        }
+        if (coord[1] >=0){
+            coord[1] += 0.001
+        }
+        else{
+            coord[1] -= 0.001
+        }
+        if (coord[2] >=0){
+            coord[2] += 0.001
+        }else{
+            coord[2] -= 0.001
+        }
     }
-    else{
-        coord[0] -= 0.001
-    }
-    if (coord[1] >=0){
-        coord[1] += 0.001
-    }
-    else{
-        coord[1] -= 0.001
-    }
-    if (coord[2] >=0){
-        coord[2] += 0.001
-    }else{
-        coord[2] -= 0.001
-    }
+
 
 
     var vargeometry = new THREE.PlaneGeometry(0.1,0.1)
@@ -444,6 +447,7 @@ var LoadLocalStorageforthefirsttime = (function() {
     return function() {
         if (!executed) {
             executed = true;
+            console.log("LoadLocalStorageforthefirsttime")
             // Retrieve the object from storage
             var retrievedObjectData = localStorage.getItem(currentplanet+"Data");
             if(retrievedObjectData != null){
@@ -469,7 +473,7 @@ function LoadLocalStorage(){
         let jsonMarkers = retrievedObject["listofmarkers"];
         
         jsonMarkers.forEach(marker => {
-            addMarker(marker["coords"], marker["Name"], marker["color"], marker["symbol"], marker["symbolsize"], marker["opacity"]);
+            addMarker(marker["coords"], marker["Name"], marker["color"], marker["symbol"], marker["symbolsize"], marker["opacity"], false);
         });
     }
 }
@@ -483,6 +487,19 @@ function UpdateLocalStorage(){
     localStorage.setItem(currentplanet + "Data", JSON.stringify(JsonData));
 }
 
+// Voor als we van planeet gaan wisselen
+function RemoveMarkers(){
+    console.log("DeletingMarkers")
+    listofmarkersobject.forEach(marker => {
+        marker.geometry.dispose();
+        marker.material.dispose();
+        scene.remove( marker );
+    });
+    listofmarkersobject = []
+}
+
+
+// Voor als we reset to default doen
 function DeleteMarkers(){
     console.log("DeletingMarkers")
     listofmarkersobject.forEach(marker => {
@@ -491,6 +508,8 @@ function DeleteMarkers(){
         scene.remove( marker );
     });
     listofmarkersobject = []
+    listofmarkers = []
+    UpdateLocalStorage()
 }
 
 
@@ -503,8 +522,7 @@ ResetId.addEventListener("click", function(){
         .then(response => response.json())
         .then(data => {
           // Use the data as needed
-          listofmarkers=data["listofmarkers"]
-          UpdateLocalStorage()
+          localStorage.setItem(currentplanet + "Data", JSON.stringify(data))
           LoadLocalStorage()
         })
         .catch(error => console.error(error));
