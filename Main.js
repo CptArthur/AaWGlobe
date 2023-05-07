@@ -1,4 +1,4 @@
-import * as THREE from "https://unpkg.com/three/build/three.module.js"; //https://cdn.skypack.dev/three
+import * as THREE from "https://unpkg.com/three/build/three.module.js"; //https://unpkg.com/three/build/three.module.js
 import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js'; //https://cdn.skypack.dev/@three-ts/orbit-controls
 import * as Tweakpane from 'https://cdn.skypack.dev/tweakpane';
 
@@ -10,6 +10,9 @@ const camera = new THREE.PerspectiveCamera( 5, window.innerWidth / (window.inner
 const renderer = new THREE.WebGLRenderer({
     antialias: true
 });
+
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace; // optional with post-processing
+
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize( window.innerWidth, window.innerHeight - headerHeight);
 document.body.appendChild( renderer.domElement );
@@ -18,7 +21,7 @@ controls.enablePan = false;
 controls.minDistance = 2;
 controls.maxDistance = 30;
 
-scene.background = new THREE.Color(0x10171E)
+scene.background = new THREE.Color(0x404040)
 
 // https://i.imgur.com/2dxaFs9.jpeg
 camera.position.set( 0, 0, 15 );
@@ -67,7 +70,7 @@ pane.addInput(Par, "Setup", {
         RemoveMarkers()
         listofmarkers = []
         LoadLocalStorage()
-        UpdatePlanetTexture(Par.Setup, IO.enabled)
+        UpdatePlanetTexture(Par.Setup, IO.IO)
     }); 
 
 
