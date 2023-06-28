@@ -1,20 +1,670 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Coming Soon</title>
+    <title>Clickable Planets</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: rgba(0, 38, 74, 0.2);
+      }
+
+      #svg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      }
+
+      .planet-info {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #ffffff;
+        padding: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        display: none;
+      }
+
+      .button-container {
+        position: absolute;
+        left: 50%;
+        bottom: 10px;
+        transform: translateX(-50%);
+        text-align: center;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .ore-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      }
+
+      .ore-grid div {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #ffffff;
+      padding: 10px;
+      }
+
+      .ore-grid strong {
+      display: block;
+      font-weight: bold;
+      }
+
+      .ore-grid ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      }
+
+      .li-red{
+        color: red;
+      }
+    </style>
+    <script src="snap.svg-min.js"></script>
+
+
   </head>
   <body>
-    <div id="header" class="topnav">
-			<li><a href="index.html">Planet Map</a></li>
-		  </div>
 
 
-    <h1>Vanilla</h1>
-    <img src="images\SystemMap\Vanilla.png" alt="Vanilla"  style='height: 100%; width: 100%; object-fit: contain'  >
+    <svg id="svg-container"></svg>
 
-    <h1>IO</h1>
-    <img src="images\SystemMap\IO.png" alt="Vanilla" style='height: 100%; width: 100%; object-fit: contain'>
+    <div class="button-container">
+      <button onclick="location.href='index.html';">Go to Planet Viewer</button>
+  </div>
+
+    <div id="bylen-info" class="planet-info">
+      <h2>Bylen</h2>
+      <img src="images\Banners\Bylen.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >
+      <p>Radius: 1000 km</p>
+      <p>Center Coordinates: (x:0, y:0 z:0)</p>
+      <h2>OreMap (Asteroid Ring)</h2>
+      <strong>Vanilla</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>                
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Silver</li>
+            <li>Gold</li>
+            <li class="li-red">Magnesium</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li>Platinum</li>            
+            <li>Uranium</li>           
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+      <strong>IO</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>      
+            <li>Bauxite</li>
+            <li class="li-red">Coal</li>            12
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Titanium</li>
+            <li>Silver</li>
+            <li>Gold</li>
+            <li class="li-red">Oil</li>
+            <li>Sulfur</li>
+            <li class="li-red">Niter</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li>Platinum</li>            
+            <li>Uranium</li> 
+            <li>Lithium</li>            
+            <li>Tantalum</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="agaris-info" class="planet-info">
+      <h2>Agaris</h2>
+      <img src="images\Banners\Agaris.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >      
+      <p>Radius: 8,000 km</p>
+      <p>Center Coordinates: (-100, -100)</p>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>                
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Silver</li>
+            <li>Gold</li>
+            <li>Magnesium</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li class="li-red">Platinum</li>            
+            <li class="li-red">Uranium</li>           
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+      <strong>IO</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>      
+            <li>Bauxite</li>
+            <li>Coal</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Titanium</li>
+            <li>Silver</li>
+            <li>Gold</li>
+            <li>Oil</li>
+            <li>Sulfur</li>
+            <li>Niter</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li class="li-red">Platinum</li>            
+            <li class="li-red" >Uranium</li> 
+            <li>Lithium</li>            
+            <li class="li-red">Tantalum</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div id="the-moon-info" class="planet-info">
+      <img src="images\Banners\AgarisII.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >      
+      <h2>Agaris II</h2>
+      <p>Radius: 3,500 km</p>
+      <p>Center Coordinates: (-100, -150)</p>
+
+      <strong>Vanilla</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>                
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Silver</li>
+            <li>Gold</li>
+            <li class="li-red">Magnesium</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li>Platinum</li>            
+            <li class="li-red">Uranium</li>           
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+      <strong>IO</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>      
+            <li>Bauxite</li>
+            <li>Coal</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Titanium</li>
+            <li>Silver</li>
+            <li>Gold</li>
+            <li  class="li-red">Oil</li>
+            <li>Sulfur</li>
+            <li  class="li-red">Niter</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li>Platinum</li>            
+            <li class="li-red" >Uranium</li> 
+            <li class="li-red">Lithium</li>            
+            <li class="li-red">Tantalum</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div id="lezuno-info" class="planet-info">
+      <h2>Lezuno</h2>
+      <img src="images\Banners\Lezuno.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >       
+      <p>Radius: 6,500 km</p>
+      <p>Center Coordinates: (-100, 100)</p>
+      <strong>Vanilla</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>                
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li class="li-red">Silver</li>
+            <li>Gold</li>
+            <li>Magnesium</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li class="li-red">Platinum</li>            
+            <li class="li-red">Uranium</li>           
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li>Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+      <strong>IO</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>      
+            <li>Bauxite</li>
+            <li>Coal</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Titanium</li>
+            <li class="li-red">Silver</li>
+            <li>Gold</li>
+            <li>Oil</li>
+            <li>Sulfur</li>
+            <li>Niter</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li class="li-red">Platinum</li>            
+            <li class="li-red" >Uranium</li> 
+            <li>Lithium</li>            
+            <li class="li-red">Tantalum</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li>Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div id="lezuno-moon-info" class="planet-info">
+      <h2>Lorus</h2>
+      <img src="images\Banners\Lorus.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >      
+      <p>Radius: 2,500 km</p>
+      <p>Center Coordinates: (-150, 100)</p>
+      <strong>Vanilla</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>                
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Silver</li>
+            <li class="li-red">Gold</li>
+            <li class="li-red">Magnesium</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li class="li-red">Platinum</li>            
+            <li>Uranium</li>           
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li>Spice</li>   
+          </ul>
+        </div>
+      </div>
+      <strong>IO</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>      
+            <li>Bauxite</li>
+            <li class="li-red">Coal</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Titanium</li>
+            <li>Silver</li>
+            <li>Gold</li>
+            <li class="li-red">Oil</li>
+            <li class="li-red">Sulfur</li>
+            <li class="li-red">Niter</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li class="li-red">Platinum</li>            
+            <li>Uranium</li> 
+            <li class="li-red">Lithium</li>            
+            <li class="li-red">Tantalum</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li>Spice</li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div id="thora4-info" class="planet-info">
+      <h2>Thora4</h2>
+      <img src="images\Banners\Thora4.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >            
+      <p>Radius: 7,200 km</p>
+      <p>Center Coordinates: (100, -100)</p>
+      <strong>Vanilla</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>                
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Silver</li>
+            <li class="li-red">Gold</li>
+            <li class="li-red">Magnesium</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li>Platinum</li>            
+            <li class="li-red">Uranium</li>           
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li>Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+      <strong>IO</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>      
+            <li>Bauxite</li>
+            <li>Coal</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Titanium</li>
+            <li>Silver</li>
+            <li>Gold</li>
+            <li>Oil</li>
+            <li>Sulfur</li>
+            <li class="li-red">Niter</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li>Platinum</li>            
+            <li class="li-red" >Uranium</li> 
+            <li class="li-red">Lithium</li>            
+            <li class="li-red">Tantalum</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li>Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li class="li-red">Spice</li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div id="crait-info" class="planet-info">
+      <h2>Crait</h2>
+      <img src="images\Banners\Crait.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >     
+      <p>Radius: 9,800 km</p>
+      <p>Center Coordinates: (200, 100)</p>
+      <strong>Vanilla</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>                
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Silver</li>
+            <li>Gold</li>
+            <li>Magnesium</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li class="li-red">Platinum</li>            
+            <li class="li-red">Uranium</li>           
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li>Spice</li>   
+          </ul>
+        </div>
+      </div>
+      <strong>IO</strong>
+      <div class="ore-grid">
+        <div>
+          <strong>II</strong>
+          <ul class="tier2-ores">
+            <li>Cobalt</li>      
+            <li>Bauxite</li>
+            <li>Coal</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>III</strong>
+          <ul class="tier3-ores">
+            <li>Titanium</li>
+            <li>Silver</li>
+            <li>Gold</li>
+            <li>Oil</li>
+            <li>Sulfur</li>
+            <li>Niter</li>
+          </ul>
+        </div>
+        <div>
+          <strong>IIII</strong>
+          <ul class="tier4-ores">
+            <li class="li-red">Platinum</li>            
+            <li class="li-red">Uranium</li> 
+            <li>Lithium</li>            
+            <li class="li-red">Tantalum</li>            
+          </ul>
+        </div>
+        <div>
+          <strong>V</strong>
+          <ul class="tier5-ores">
+            <li class="li-red">Crystal</li>
+            <li class="li-red">Dorium</li>
+            <li class="li-red">Cronyx</li>            
+            <li>Spice</li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+
+
+
+    <script type="module" src="GalaxyMap.js"></script>
+
   </body>
 </html>
