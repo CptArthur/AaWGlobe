@@ -79,3 +79,21 @@ bottom: 0;
 #GalaxyMapId{
   background-color: #280404;
 }
+
+
+.button-container {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

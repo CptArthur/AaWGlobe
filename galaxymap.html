@@ -9,7 +9,14 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        background-color: rgba(0, 38, 74, 0.2);
+        background-color: rgba(3, 26, 36, 0.523);
+
+        background-size: 40px 40px;
+        background-image:
+        linear-gradient(to right, grey 1px, transparent 1px),
+        linear-gradient(to bottom, grey 1px, transparent 1px);
+
+
       }
 
       #svg-container {
@@ -33,6 +40,7 @@
         font-family: Arial, sans-serif;
         font-size: 14px;
         display: none;
+        max-width: 420px;
       }
 
       .button-container {
@@ -41,6 +49,26 @@
         bottom: 10px;
         transform: translateX(-50%);
         text-align: center;
+      }
+
+      .titel-container {
+        position: fixed;
+        left: 50%;
+        top: 1em;
+        transform: translateX(-50%);
+        text-align: center;
+      }
+
+      .planetinfo-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+
+      h1 {
+        font-size: 88px;
+        color: #ffffff;
       }
 
       button {
@@ -64,6 +92,7 @@
       padding: 10px;
       }
 
+
       .ore-grid strong {
       display: block;
       font-weight: bold;
@@ -78,6 +107,10 @@
       .li-red{
         color: red;
       }
+
+      img{
+        width: 400px;
+      }
     </style>
     <script src="snap.svg-min.js"></script>
 
@@ -87,17 +120,21 @@
 
 
     <svg id="svg-container"></svg>
+    <div class="titel-container">
+      <h1>Ares System</h1>
+     </div>
+
 
     <div class="button-container">
       <button onclick="location.href='index.html';">Go to Planet Viewer</button>
   </div>
 
     <div id="bylen-info" class="planet-info">
-      <h2>Bylen</h2>
-      <img src="images\Banners\Bylen.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >
+      <img src="images\Banners\Bylen.png" alt="Vanislla"  >
+      <h2>Bylen + Ring</h2>
+
       <p>Radius: 1000 km</p>
       <p>Center Coordinates: (x:0, y:0 z:0)</p>
-      <h2>OreMap (Asteroid Ring)</h2>
       <strong>Vanilla</strong>
       <div class="ore-grid">
         <div>
@@ -174,10 +211,33 @@
     </div>
 
     <div id="agaris-info" class="planet-info">
-      <h2>Agaris</h2>
-      <img src="images\Banners\Agaris.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >      
-      <p>Radius: 8,000 km</p>
-      <p>Center Coordinates: (-100, -100)</p>
+      <img src="images\Banners\Agaris.png" alt="Vanislla"  > 
+      <h2>Agaris</h2>  
+      <p>Welcome to Agaris, a remarkable Earth-like planet situated within the Ares System. With a radius of 120 kilometers, this celestial body presents a striking resemblance to our home planet. From its glistening waters to its moderate temperatures and verdant landscapes, Agaris offers a sense of familiarity and natural beauty that evokes the essence of Earth.</p> 
+      
+      <div class="planetinfo-container">
+        <div>
+          <h2>Planet Info</h2>
+          <p>Radius: 120 km</p>
+          <p>Center Coordinates:</p>
+          <p>Gravity: 1g</p>
+          <p>Oxygen: High</p>
+          <p>Temperature: Warm</p>
+          <p>Weather: Varied</p>
+        </div>
+        <div class="encounters">
+          <h2>Factions</h2>
+          <p>Colonies of Agaris (Azuris, Carcosa, Sunset City)</p>
+          <p>Goldo Corperation</p>
+          <p>Free Agaris Forces</p>
+          <p>Interstellar Trade Corp.</p>
+          <p>Shivan Syndicate</p>        
+          <p>Desert Raiders</p>          
+          
+          <!-- Add your encounter information here -->
+        </div>  
+      </div>    
+      <strong>Vanilla</strong>
       <div class="ore-grid">
         <div>
           <strong>II</strong>
@@ -254,11 +314,11 @@
     </div>
 
     <div id="the-moon-info" class="planet-info">
-      <img src="images\Banners\AgarisII.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >      
+      <img src="images\Banners\AgarisII.png" alt="Vanislla"  >      
       <h2>Agaris II</h2>
-      <p>Radius: 3,500 km</p>
-      <p>Center Coordinates: (-100, -150)</p>
-
+      <p>Radius: 50 km</p>
+      <p>Gravity: 0.3g</p>      
+      <p>Center Coordinates: </p>
       <strong>Vanilla</strong>
       <div class="ore-grid">
         <div>
@@ -336,10 +396,16 @@
     </div>
 
     <div id="lezuno-info" class="planet-info">
-      <h2>Lezuno</h2>
-      <img src="images\Banners\Lezuno.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >       
-      <p>Radius: 6,500 km</p>
-      <p>Center Coordinates: (-100, 100)</p>
+      <img src="images\Banners\Lezuno.png" alt="Vanislla"  >   
+      <h2>Lezuno</h2>      
+      <p>Radius: 120 km</p>
+      <p>Center Coordinates: </p>
+      <p>Gravity: 1.3g</p>      
+      <p>Oxygen: Low</p>
+      <p>Temperature: Hot</p>
+      <p>Weather: Sandstorm, Marsstorm, ElectircStorm</p>    
+
+
       <strong>Vanilla</strong>
       <div class="ore-grid">
         <div>
@@ -417,10 +483,15 @@
     </div>
 
     <div id="lezuno-moon-info" class="planet-info">
-      <h2>Lorus</h2>
-      <img src="images\Banners\Lorus.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >      
-      <p>Radius: 2,500 km</p>
-      <p>Center Coordinates: (-150, 100)</p>
+      <img src="images\Banners\Lorus.png" alt="Vanislla"  > 
+      <h2>Lorus</h2>     
+      <p>Radius: 50 km</p>
+      <p>Center Coordinates: </p>
+      <p>Gravity: 1g</p>      
+      <p>Oxygen: Low</p>
+      <p>Temperature: Cold</p>
+      <p>Weather: Fog</p> 
+
       <strong>Vanilla</strong>
       <div class="ore-grid">
         <div>
@@ -498,10 +569,15 @@
     </div>
 
     <div id="thora4-info" class="planet-info">
-      <h2>Thora4</h2>
-      <img src="images\Banners\Thora4.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >            
-      <p>Radius: 7,200 km</p>
-      <p>Center Coordinates: (100, -100)</p>
+      <img src="images\Banners\Thora4.png" alt="Vanislla"  > 
+      <h2>Thora4</h2>                
+      <p>Radius: 100 km</p>
+      <p>Center Coordinates: </p>
+      <p>Gravity: 1g</p>
+      <p>Oxygen: High</p>
+      <p>Temperature: Cold</p>
+      <p>Weather: Fog,Rain,Snow</p> 
+
       <strong>Vanilla</strong>
       <div class="ore-grid">
         <div>
@@ -579,10 +655,14 @@
     </div>
 
     <div id="crait-info" class="planet-info">
-      <h2>Crait</h2>
-      <img src="images\Banners\Crait.png" alt="Vanislla"  style='height: auto; width: 400px; object-fit: contain'  >     
-      <p>Radius: 9,800 km</p>
-      <p>Center Coordinates: (200, 100)</p>
+      <img src="images\Banners\Crait.png" alt="Vanislla"  >
+      <h2>Crait</h2>     
+      <p>Radius: 63 km</p>
+      <p>Center Coordinates: </p>
+      <p>Gravity: 1g</p>
+      <p>Oxygen: Low</p>
+      <p>Temperature: Cold</p>
+      <p>Weather: Fog,Salt,Red, Snow</p>                 
       <strong>Vanilla</strong>
       <div class="ore-grid">
         <div>
@@ -659,7 +739,13 @@
     </div>
     </div>
 
+    <div id="S27-info" class="planet-info">
+      <img src="images\Banners\Station27.png" alt="Vanislla"  >      
+      <h2>Station 27</h2>  
+      <p>Coordinates: x="1038559" y="-34.97" z="-246288.89"</p>
 
+ 
+    </div>
 
 
 
