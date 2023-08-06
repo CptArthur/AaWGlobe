@@ -57,7 +57,7 @@ const IO = {
 var currentplanet = "Agaris"
 
 //Planet Selector
-pane.addInput(Par, "Setup", {
+pane.addBinding(Par, "Setup", {
     options: {
     Agaris: 'Agaris',
     Crait: 'Crait',
@@ -75,7 +75,7 @@ pane.addInput(Par, "Setup", {
 
 
 //IO or vanilla    
-pane.addInput(IO, 'IO').on("change", (ev) =>{
+pane.addBinding(IO, 'IO').on("change", (ev) =>{
         UpdatePlanetTexture(Par.Setup, IO.IO)
     }); 
         
@@ -217,9 +217,9 @@ function editmode(object, Jsonmarker, i){
     const f1 = pane.addFolder({
         title: 'Marker Information',
       });
-      f1.addInput(PARAMS, "Name");
-      f1.addInput(PARAMS, 'color' , {view: 'color',} );
-      f1.addInput(PARAMS, 'symbol' , {options: {
+      f1.addBinding(PARAMS, "Name");
+      f1.addBinding(PARAMS, 'color' , {view: 'color',} );
+      f1.addBinding(PARAMS, 'symbol' , {options: {
         HQ: "images/HQ.png",
         RegionOutpost: "images/RegionOutpost.png",
         Colony: "images/Colony.png",
@@ -230,11 +230,11 @@ function editmode(object, Jsonmarker, i){
         Ship: "images/Ship.png",
         SupplyDepot: "images/SupplyDepot.png",             
       },}  );
-      f1.addInput(PARAMS, 'symbolsize' , {
+      f1.addBinding(PARAMS, 'symbolsize' , {
     min: 0.05,
     max: 0.2,
     }   )
-    f1.addInput(PARAMS, 'opacity' , {
+    f1.addBinding(PARAMS, 'opacity' , {
         min: 0.05,
         max: 1,
         }   )  
