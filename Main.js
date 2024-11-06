@@ -54,6 +54,16 @@ const IO = {
     IO: false,
 };
 
+const HighRES = {
+    HighRES: false,
+};
+
+const Beta = {
+    Beta: false,
+};
+
+
+
 var currentplanet = "Agaris"
 
 //Planet Selector
@@ -70,29 +80,51 @@ pane.addBinding(Par, "Setup", {
         RemoveMarkers()
         listofmarkers = []
         LoadLocalStorage()
-        UpdatePlanetTexture(Par.Setup, IO.IO)
+        UpdatePlanetTexture(Par.Setup, IO.IO, HighRES.HighRES, Beta.Beta)
     }); 
 
 
 //IO or vanilla    
 pane.addBinding(IO, 'IO').on("change", (ev) =>{
-        UpdatePlanetTexture(Par.Setup, IO.IO)
+        UpdatePlanetTexture(Par.Setup, IO.IO, HighRES.HighRES, Beta.Beta)
     }); 
         
+//HighRES 
+pane.addBinding(HighRES, 'HighRES').on("change", (ev) =>{
+    UpdatePlanetTexture(Par.Setup, IO.IO, HighRES.HighRES, Beta.Beta)
+}); 
 
-const p1 = pane.addFolder({
-    title: 'Planet Info',
-  });
+//neta
+pane.addBinding(Beta, 'Beta').on("change", (ev) =>{
+    UpdatePlanetTexture(Par.Setup, IO.IO, HighRES.HighRES, Beta.Beta)
+}); 
+
+
 
   
-function UpdatePlanetTexture(PlanetName,IOEnabled){
-    //console.log(`images/${PlanetName}.png`);
-    if(IOEnabled){
-        cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/Planets_HighRes/${PlanetName}_IO.png`)}) 
-    }
-    else{
-        cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(`images/Planets_HighRes/${PlanetName}.png`)}) 
-    }
+function UpdatePlanetTexture(PlanetName, IOEnabled, HighRESEnabled, Beta) {
+// Determine the base path based on resolution
+const resolutionPath = HighRESEnabled ? 'Planets_HighRes' : 'Planets_LowRes';
+
+// Determine the specific filename based on IOEnabled and Beta flags
+let fileName;
+if (IOEnabled && Beta) {
+    fileName = `${PlanetName}_IO_Beta.png`;
+} else if (IOEnabled) {
+    fileName = `${PlanetName}_IO.png`;
+} else if (Beta) {
+    fileName = `${PlanetName}_Beta.png`;
+} else {
+    fileName = `${PlanetName}.png`;
+}
+
+// Construct the full path to the texture
+const texturePath = `images/${resolutionPath}/${fileName}`;
+
+
+
+cube.material = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load(texturePath)}) 
+
 
 }
 UpdatePlanetTexture(currentplanet,false)
