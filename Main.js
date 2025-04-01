@@ -1,6 +1,6 @@
-import * as THREE from "https://unpkg.com/three/build/three.module.js"; //https://unpkg.com/three/build/three.module.js
-import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js'; //https://cdn.skypack.dev/@three-ts/orbit-controls
-import * as Tweakpane from 'https://cdn.jsdelivr.net/npm/tweakpane@4.0.5/dist/tweakpane.min.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as Tweakpane from './libs/tweakpane.min.js';
 
 var headerHeight = document.getElementById('header').clientHeight;
 let raycaster1
